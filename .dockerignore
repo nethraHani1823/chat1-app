@@ -1,0 +1,11 @@
+# Files listed here are NOT copied into the image.
+# Keeps the image small and avoids shipping secrets by accident.
+__pycache__/
+*.pyc
+.git/
+.github/
+.pytest_cache/
+venv/
+.venv/
+.env
+README.md

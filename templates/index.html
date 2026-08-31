@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Radio Room</title>
+
+  <!-- Fonts. If you are offline these quietly fall back to system fonts. -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700&family=IBM+Plex+Sans:wght@400;600&display=swap" rel="stylesheet">
+
+  <!-- url_for finds the file in the static/ folder for you. -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<div class="home">
+
+  <a class="mark" href="{{ url_for('index') }}">
+    <span class="mark-dot"></span>
+    Radio Room
+  </a>
+
+  <div class="home-hero">
+
+    <div>
+      <h1>Everyone in the room hears you.</h1>
+
+      <p class="lede">
+        A chat room with nothing in it but messages. Pick a name, open this
+        page on your phone as well, and watch what you type appear in both
+        places.
+      </p>
+
+      <!-- A plain form. Sending it puts the name in the URL and takes
+           you to /room?name=whatever-you-typed -->
+      <div class="join">
+        <form action="{{ url_for('room') }}" method="get">
+          <label for="name">What should people call you?</label>
+          <div class="join-row">
+            <input class="field" id="name" name="name" maxlength="20"
+                   placeholder="Your name" required autofocus>
+            <button class="button" type="submit">Enter the room</button>
+          </div>
+        </form>
+
+        <p class="count">
+          {% if message_count %}
+            {{ message_count }} message{{ '' if message_count == 1 else 's' }} waiting inside.
+          {% else %}
+            The room is empty. You would be the first to say something.
+          {% endif %}
+        </p>
+      </div>
+    </div>
+
+    <!-- The picture. It is a file at static/signal.svg -->
+    <img class="home-art"
+         src="{{ url_for('static', filename='signal.svg') }}"
+         alt="Signal rings spreading outward from the middle to four chat bubbles">
+
+  </div>
+
+  <div class="notes">
+    <div>
+      <h2>It runs on your machine</h2>
+      <p>
+        Started with one command. Nothing is deployed anywhere yet, which
+        is why only you can reach it.
+      </p>
+    </div>
+    <div>
+      <h2>Messages are not saved</h2>
+      <p>
+        They live in a Python list. Stop the app and they are gone. Adding
+        a database is the obvious next exercise.
+      </p>
+    </div>
+    <div>
+      <h2>Ready to be shipped</h2>
+      <p>
+        The folder already has a Dockerfile and a pipeline. Those are the
+        pieces that take this off your laptop.
+      </p>
+    </div>
+  </div>
+
+</div>
+
+</body>
+</html>

@@ -1,0 +1,75 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 480" width="640" height="480" role="img" aria-label="Signal rings spreading outward to four chat bubbles">
+  <style>
+    .ring { animation: ping 5s ease-in-out infinite; }
+    .ring-2 { animation-delay: .5s; }
+    .ring-3 { animation-delay: 1s; }
+    .ring-4 { animation-delay: 1.5s; }
+    @keyframes ping {
+      0%, 100% { opacity: .18; }
+      45%      { opacity: .75; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .ring { animation: none; opacity: .4; }
+    }
+  </style>
+
+  <defs>
+    <pattern id="dots" width="26" height="26" patternUnits="userSpaceOnUse">
+      <circle cx="2" cy="2" r="1.1" fill="#2E4A66"/>
+    </pattern>
+    <clipPath id="frame">
+      <rect x="0" y="0" width="640" height="480" rx="18"/>
+    </clipPath>
+  </defs>
+
+  <g clip-path="url(#frame)">
+    <rect width="640" height="480" fill="#1B2E44"/>
+    <rect width="640" height="480" fill="url(#dots)"/>
+
+    <!-- signal rings spreading out from the middle -->
+    <g fill="none" stroke="#F2A73B" stroke-width="1.6">
+      <circle class="ring ring-1" cx="320" cy="240" r="62"/>
+      <circle class="ring ring-2" cx="320" cy="240" r="116"/>
+      <circle class="ring ring-3" cx="320" cy="240" r="172"/>
+      <circle class="ring ring-4" cx="320" cy="240" r="230"/>
+    </g>
+
+    <!-- the four listeners -->
+    <g>
+      <path d="M112 118h96a12 12 0 0 1 12 12v40a12 12 0 0 1-12 12h-58l-20 18v-18h-18a12 12 0 0 1-12-12v-40a12 12 0 0 1 12-12z"
+            fill="#24405C" stroke="#38597C" stroke-width="1.5"/>
+      <g fill="#8FA8BF">
+        <circle cx="140" cy="150" r="4.5"/><circle cx="160" cy="150" r="4.5"/><circle cx="180" cy="150" r="4.5"/>
+      </g>
+    </g>
+
+    <g>
+      <path d="M432 152h96a12 12 0 0 1 12 12v40a12 12 0 0 1-12 12h-58l-20 18v-18h-18a12 12 0 0 1-12-12v-40a12 12 0 0 1 12-12z"
+            fill="#24405C" stroke="#38597C" stroke-width="1.5"/>
+      <g fill="#8FA8BF">
+        <circle cx="460" cy="184" r="4.5"/><circle cx="480" cy="184" r="4.5"/><circle cx="500" cy="184" r="4.5"/>
+      </g>
+    </g>
+
+    <g>
+      <path d="M92 300h96a12 12 0 0 1 12 12v40a12 12 0 0 1-12 12h-58l-20 18v-18H92a12 12 0 0 1-12-12v-40a12 12 0 0 1 12-12z"
+            fill="#24405C" stroke="#38597C" stroke-width="1.5"/>
+      <g fill="#8FA8BF">
+        <circle cx="120" cy="332" r="4.5"/><circle cx="140" cy="332" r="4.5"/><circle cx="160" cy="332" r="4.5"/>
+      </g>
+    </g>
+
+    <!-- the amber one is you -->
+    <g>
+      <path d="M444 330h94a12 12 0 0 1 12 12v40a12 12 0 0 1-12 12h-56l-20 18v-18h-18a12 12 0 0 1-12-12v-40a12 12 0 0 1 12-12z"
+            fill="#F2A73B"/>
+      <g fill="#16273A">
+        <circle cx="472" cy="362" r="4.5"/><circle cx="492" cy="362" r="4.5"/><circle cx="512" cy="362" r="4.5"/>
+      </g>
+    </g>
+
+    <!-- the transmitter in the middle -->
+    <circle cx="320" cy="240" r="30" fill="#F2A73B"/>
+    <path d="M306 232h28M306 240h28M306 248h20" stroke="#16273A" stroke-width="3.2" stroke-linecap="round"/>
+  </g>
+</svg>

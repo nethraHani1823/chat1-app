@@ -1,0 +1,317 @@
+/* ------------------------------------------------------------------
+   All the styling for both pages lives here.
+   The :root block at the top holds every colour and size used below,
+   so changing one line there restyles the whole app.
+   ------------------------------------------------------------------ */
+
+:root {
+  --ink:      #16273A;   /* page background, deep navy */
+  --panel:    #1F344B;   /* raised surfaces */
+  --panel-2:  #24405C;   /* incoming message bubbles */
+  --edge:     #2E4A66;   /* borders */
+  --paper:    #E9F0F7;   /* main text */
+  --muted:    #8FA8BF;   /* secondary text */
+  --signal:   #F2A73B;   /* the accent: buttons, your own messages */
+
+  --display: "Archivo", "Helvetica Neue", Arial, sans-serif;
+  --body: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+
+  --radius: 14px;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background: var(--ink);
+  color: var(--paper);
+  font-family: var(--body);
+  font-size: 16px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+a { color: var(--signal); }
+
+/* Keyboard users need to see where they are. */
+:focus-visible {
+  outline: 2px solid var(--signal);
+  outline-offset: 3px;
+}
+
+/* ---------- the small wordmark used at the top of both pages ---------- */
+
+.mark {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--display);
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: var(--paper);
+  text-decoration: none;
+  font-size: 1.05rem;
+}
+
+.mark-dot {
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  background: var(--signal);
+  flex: none;
+}
+
+/* ==================================================================
+   HOME PAGE
+   ================================================================== */
+
+.home {
+  max-width: 1040px;
+  margin: 0 auto;
+  padding: 34px 26px 70px;
+}
+
+.home-hero {
+  display: grid;
+  grid-template-columns: 1fr 1.15fr;
+  gap: 56px;
+  align-items: center;
+  margin-top: 62px;
+}
+
+.home-hero h1 {
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: clamp(2.1rem, 4.6vw, 3.1rem);
+  line-height: 1.08;
+  letter-spacing: -0.025em;
+  margin: 0 0 18px;
+}
+
+.home-hero p.lede {
+  color: var(--muted);
+  font-size: 1.06rem;
+  max-width: 42ch;
+  margin: 0 0 30px;
+}
+
+/* the picture */
+.home-art {
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 18px;
+  border: 1px solid var(--edge);
+}
+
+/* the box where you type your name */
+.join {
+  background: var(--panel);
+  border: 1px solid var(--edge);
+  border-radius: var(--radius);
+  padding: 22px;
+}
+
+.join label {
+  display: block;
+  font-size: 0.9rem;
+  color: var(--muted);
+  margin-bottom: 9px;
+}
+
+.join-row {
+  display: flex;
+  gap: 10px;
+}
+
+.field {
+  font: inherit;
+  flex: 1;
+  min-width: 0;
+  padding: 12px 14px;
+  color: var(--paper);
+  background: var(--ink);
+  border: 1px solid var(--edge);
+  border-radius: 9px;
+}
+
+.field::placeholder { color: #5F7A94; }
+
+.button {
+  font: inherit;
+  font-weight: 600;
+  padding: 12px 22px;
+  border: 0;
+  border-radius: 9px;
+  background: var(--signal);
+  color: var(--ink);
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.button:hover { background: #FFB94E; }
+
+.count {
+  margin: 14px 0 0;
+  font-size: 0.88rem;
+  color: var(--muted);
+}
+
+/* the three short explanations under the hero */
+.notes {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 34px;
+  margin-top: 76px;
+  padding-top: 34px;
+  border-top: 1px solid var(--edge);
+}
+
+.notes h2 {
+  font-family: var(--display);
+  font-size: 1rem;
+  font-weight: 700;
+  margin: 0 0 7px;
+}
+
+.notes p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.94rem;
+}
+
+/* ==================================================================
+   CHAT ROOM
+   ================================================================== */
+
+.room {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  height: 100dvh;   /* dvh accounts for the address bar on phones */
+  max-width: 780px;
+  margin: 0 auto;
+  padding: 0 18px;
+}
+
+.room-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 18px 4px;
+  border-bottom: 1px solid var(--edge);
+}
+
+.room-who {
+  font-size: 0.88rem;
+  color: var(--muted);
+}
+
+.room-who b { color: var(--paper); font-weight: 600; }
+
+.leave {
+  font-size: 0.88rem;
+  color: var(--muted);
+  text-decoration: none;
+  border: 1px solid var(--edge);
+  padding: 7px 14px;
+  border-radius: 8px;
+}
+
+.leave:hover { color: var(--paper); border-color: var(--muted); }
+
+/* the scrolling list of messages */
+.stream {
+  flex: 1;
+  overflow-y: auto;
+  padding: 22px 4px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.empty {
+  margin: auto;
+  text-align: center;
+  color: var(--muted);
+  max-width: 30ch;
+}
+
+.msg { max-width: 74%; }
+
+.msg .from {
+  font-size: 0.79rem;
+  color: var(--muted);
+  margin: 0 0 5px 3px;
+}
+
+.msg .bubble {
+  background: var(--panel-2);
+  border: 1px solid var(--edge);
+  padding: 11px 15px;
+  border-radius: 15px 15px 15px 5px;
+  word-wrap: break-word;
+  overflow-wrap: anywhere;
+}
+
+.msg .at {
+  font-size: 0.72rem;
+  color: var(--muted);
+  margin: 5px 0 0 3px;
+}
+
+/* your own messages sit on the right and use the accent colour */
+.msg.mine {
+  align-self: flex-end;
+}
+
+.msg.mine .bubble {
+  background: var(--signal);
+  border-color: var(--signal);
+  color: var(--ink);
+  border-radius: 15px 15px 5px 15px;
+}
+
+.msg.mine .at { text-align: right; margin: 5px 3px 0 0; }
+
+/* the box you type into */
+.composer {
+  display: flex;
+  gap: 10px;
+  padding: 16px 4px 22px;
+  border-top: 1px solid var(--edge);
+}
+
+/* ==================================================================
+   SMALL SCREENS
+   ================================================================== */
+
+@media (max-width: 800px) {
+  .home-hero {
+    grid-template-columns: 1fr;
+    gap: 34px;
+    margin-top: 38px;
+  }
+
+  .notes {
+    grid-template-columns: 1fr;
+    gap: 24px;
+    margin-top: 52px;
+  }
+
+  .msg { max-width: 86%; }
+
+  /* The header has three things in it and a phone is narrow.
+     Drop the least important one. */
+  .room-who { display: none; }
+}
+
+@media (max-width: 460px) {
+  .join-row { flex-direction: column; }
+  .button { width: 100%; }
+}

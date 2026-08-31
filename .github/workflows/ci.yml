@@ -1,0 +1,75 @@
+# This file IS the pipeline. Put it in your repo, push, and GitHub
+# starts running it automatically. There is nothing else to install.
+#
+# Watch it run in the "Actions" tab of your repository.
+
+name: CI
+
+# When should this run?
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  # ---------------------------------------------------------------
+  # Job 1: run the tests
+  # ---------------------------------------------------------------
+  test:
+    runs-on: ubuntu-latest  # GitHub gives us a fresh Linux machine
+
+    steps:
+      - name: Get the code
+        uses: actions/checkout@v4
+
+      - name: Install Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
+          pip install pytest
+
+      - name: Run tests
+        run: pytest -v
+
+  # ---------------------------------------------------------------
+  # Job 2: build the Docker image
+  # "needs: test" means this only starts if the tests passed.
+  # That single line is the safety gate of the whole pipeline.
+  # ---------------------------------------------------------------
+  build:
+    needs: test
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Get the code
+        uses: actions/checkout@v4
+
+      - name: Build the image
+        run: docker build -t chat-app:${{ github.sha }} .
+
+      - name: Check the container actually starts
+        run: |
+          docker run -d -p 5000:5000 --name chat chat-app:${{ github.sha }}
+          sleep 5
+          curl --fail http://localhost:5000/health
+          docker stop chat
+
+  # ---------------------------------------------------------------
+  # Job 3: deploy - deliberately left as a placeholder.
+  # This is where you'd push the image to a registry and tell your
+  # server to run the new version. Fill it in once you have somewhere
+  # to deploy to.
+  # ---------------------------------------------------------------
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+
+    steps:
+      - name: Deploy
+        run: echo "Nothing here yet - this is your next exercise."

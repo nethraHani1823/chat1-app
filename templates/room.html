@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Radio Room - {{ name }}</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700&family=IBM+Plex+Sans:wght@400;600&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<div class="room">
+
+  <div class="room-head">
+    <span class="mark">
+      <span class="mark-dot"></span>
+      Radio Room
+    </span>
+    <span class="room-who">you are <b>{{ name }}</b>, on {{ hostname }}</span>
+    <a class="leave" href="{{ url_for('index') }}">Leave</a>
+  </div>
+
+  <div class="stream" id="stream">
+    <p class="empty">Waiting for the first message.</p>
+  </div>
+
+  <div class="composer">
+    <input class="field" id="text" maxlength="500"
+           placeholder="Type a message" autofocus>
+    <button class="button" id="send">Send</button>
+  </div>
+
+</div>
+
+<script>
+// Your name, handed over from Python.
+const me = {{ name|tojson }};
+
+const stream = document.getElementById("stream");
+const box    = document.getElementById("text");
+const send   = document.getElementById("send");
+
+// Remembers how many messages we drew last time, so we only redraw
+// the page when something has actually changed.
+let drawn = -1;
+
+// ---------------------------------------------------------------
+// Put the messages on the screen.
+// ---------------------------------------------------------------
+function draw(messages) {
+  stream.textContent = "";
+
+  if (messages.length === 0) {
+    const p = document.createElement("p");
+    p.className = "empty";
+    p.textContent = "Waiting for the first message.";
+    stream.appendChild(p);
+    return;
+  }
+
+  for (const m of messages) {
+    const wrap = document.createElement("div");
+    // Your own messages get the "mine" class, which moves them to the
+    // right and colours them amber. The CSS does the rest.
+    wrap.className = m.name === me ? "msg mine" : "msg";
+
+    if (m.name !== me) {
+      const from = document.createElement("p");
+      from.className = "from";
+      from.textContent = m.name;
+      wrap.appendChild(from);
+    }
+
+    const bubble = document.createElement("div");
+    bubble.className = "bubble";
+    // textContent, not innerHTML. If someone types <script> it is shown
+    // as plain text instead of being run. Never skip this.
+    bubble.textContent = m.text;
+    wrap.appendChild(bubble);
+
+    const at = document.createElement("p");
+    at.className = "at";
+    at.textContent = m.time;
+    wrap.appendChild(at);
+
+    stream.appendChild(wrap);
+  }
+
+  stream.scrollTop = stream.scrollHeight;
+}
+
+// ---------------------------------------------------------------
+// Ask the server for the messages.
+// ---------------------------------------------------------------
+async function refresh() {
+  try {
+    const response = await fetch("/api/messages");
+    const messages = await response.json();
+
+    if (messages.length !== drawn) {
+      draw(messages);
+      drawn = messages.length;
+    }
+  } catch (err) {
+    // The server is probably restarting. Try again on the next tick.
+    console.log("Could not reach the server:", err);
+  }
+}
+
+// ---------------------------------------------------------------
+// Send what is in the box.
+// ---------------------------------------------------------------
+async function post() {
+  const text = box.value.trim();
+  if (!text) return;
+
+  box.value = "";
+
+  await fetch("/api/messages", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ name: me, text: text })
+  });
+
+  refresh();
+  box.focus();
+}
+
+send.addEventListener("click", post);
+box.addEventListener("keydown", e => {
+  if (e.key === "Enter") post();
+});
+
+// Draw once straight away, then check for new messages every 2 seconds.
+// This is called polling. It is the simplest thing that works.
+refresh();
+setInterval(refresh, 2000);
+</script>
+
+</body>
+</html>
