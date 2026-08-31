@@ -52,11 +52,20 @@ jobs:
       - name: Build the image
         run: docker build -t chat-app:${{ github.sha }} .
 
-      - name: Check the container actually starts
+          - name: Check the container actually starts
         run: |
-          docker run -d -p 5000:5000 --name chat chat-app:${{ github.sha }}
+          # A throwaway key is fine here - this container is deleted in
+          # seconds. For a real deploy you would write
+          #   -e SECRET_KEY="${{ secrets.SECRET_KEY }}"
+          # and set that value under Settings -> Secrets and variables.
+          # GitHub then hides it from the logs. Never paste a real secret
+          # into this file; anyone who can see your repo can see it.
+          docker run -d -p 5000:5000 \
+            -e SECRET_KEY=throwaway-key-for-ci \
+            --name chat chat-app:${{ github.sha }}
           sleep 5
           curl --fail http://localhost:5000/health
+          curl --fail http://localhost:5000/login
           docker stop chat
 
   # ---------------------------------------------------------------
